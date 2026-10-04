@@ -11,7 +11,25 @@
 ![Git](https://img.shields.io/badge/Git-GitHub-F05032?logo=git&logoColor=white)
 ![Days](https://img.shields.io/badge/Days-7-2E74B5)
 
+[![Watch on YouTube](https://img.shields.io/badge/▶_Watch_on_YouTube-DevOps__jadeja-FF0000?logo=youtube&logoColor=white)](https://www.youtube.com/@Devops_jadeja)
+
 </div>
+
+---
+
+## 🎬 Start here: watch the videos first
+
+> **Before you start the tasks, go through the videos on the DevOps Jadeja YouTube channel.**
+> They explain most of the concepts used in this README, so the commands and tasks below will make far more sense.
+
+### 👉 [youtube.com/@Devops_jadeja](https://www.youtube.com/@Devops_jadeja)
+
+**Suggested way to learn each day:**
+
+1. 📺 Watch the related video(s) for the day's topic.
+2. 📖 Read the day's section below, then the command tables in the guide.
+3. 💻 Do the hands-on task on a real VM.
+4. ✅ Tick it off in the progress tracker.
 
 ---
 
