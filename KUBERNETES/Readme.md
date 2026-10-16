@@ -6,11 +6,11 @@ Days 1–7 · 7 small hands-on tasks · 30% concepts + 70% hands-on
 
 ## 🎬 Start here: watch the video first
 
-[▶ Watch: Kubernetes on kind (Week 3)](ADD_YOUR_YOUTUBE_VIDEO_LINK_HERE)
+[▶ Watch: Kubernetes on kind (Week 3)](https://www.youtube.com/live/jwyZgUh4vCQ?si=54HakR9dkN_1y35s)
 
 More videos: [youtube.com/@Devops_jadeja](https://youtube.com/@Devops_jadeja)
 
-📄 Slides: [Week 3 Kubernetes deck](ADD_YOUR_DOCUMENT_LINK_HERE)
+📄 Slides: [Week 3 Kubernetes deck](https://docs.google.com/presentation/d/1L45Q2jSpBbCUGjIC427Vx-N3BAUqfiJm/edit?usp=sharing&ouid=104855601374610993853&rtpof=true&sd=true)
 
 ## The 7-day route
 
