@@ -1,0 +1,236 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Winter Arc Wall of Fame</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+[hidden]{display:none!important}
+body{margin:0}
+/* Layout: a console-style roster. Header facts, a sticky search + day jump bar, a Top 10 consistency board, then one collapsible section per challenge day listing every learner who posted. */
+:root{
+  --bg:#EDF1F5; --surface:#FFFFFF; --ink:#0E1C2B; --mute:#56677A; --line:#D2DBE5;
+  --accent:#0B6F8E; --accent-ink:#FFFFFF; --accent-soft:#DCEEF4; --tick-off:#DCE4EC;
+  --f-display:"Bricolage Grotesque","IBM Plex Sans",system-ui,sans-serif;
+  --f-body:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --f-mono:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0A1520; --surface:#111F2E; --ink:#E5EDF5; --mute:#90A3B6; --line:#24374A;
+    --accent:#5CC6E6; --accent-ink:#062230; --accent-soft:#12374A; --tick-off:#22364A; color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0A1520; --surface:#111F2E; --ink:#E5EDF5; --mute:#90A3B6; --line:#24374A;
+  --accent:#5CC6E6; --accent-ink:#062230; --accent-soft:#12374A; --tick-off:#22364A; color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font:15px/1.5 var(--f-body)}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--bg)}
+.wrap{max-width:1080px;margin:0 auto;padding-inline:max(16px,env(safe-area-inset-left,0px)) max(16px,env(safe-area-inset-right,0px));padding-block:28px 56px}
+.mono{font-family:var(--f-mono);font-variant-numeric:tabular-nums}
+
+header{display:grid;gap:14px;padding-bottom:22px}
+.kicker{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:center;font:600 12px/1 var(--f-mono);letter-spacing:.08em;text-transform:uppercase;color:var(--mute)}
+.kicker .day{background:var(--accent);color:var(--accent-ink);padding:6px 10px;border-radius:4px}
+h1{margin:0;font:800 clamp(34px,7vw,64px)/1 var(--f-display);letter-spacing:-.025em;text-wrap:balance}
+h1 em{font-style:normal;color:var(--accent)}
+.facts{display:flex;flex-wrap:wrap;gap:6px 28px;margin:0;padding:14px 0 0;border-top:1px solid var(--line);list-style:none}
+.facts li{display:flex;align-items:baseline;gap:8px;color:var(--mute);font-size:14px}
+.facts b{font:600 22px/1 var(--f-mono);color:var(--ink)}
+
+.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);padding-block:10px;border-bottom:1px solid var(--line);display:grid;gap:10px}
+.search{display:flex;gap:8px;flex-wrap:wrap}
+.search input{flex:1 1 220px;min-width:0;background:var(--surface);color:var(--ink);border:1px solid var(--line);border-radius:6px;padding:10px 12px;font:inherit}
+.search input:focus-visible,button:focus-visible,a:focus-visible,summary:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.btn{background:var(--surface);color:var(--ink);border:1px solid var(--line);border-radius:6px;padding:10px 14px;font:500 14px var(--f-body);cursor:pointer}
+.btn:hover{border-color:var(--accent);color:var(--accent)}
+.days{display:flex;gap:4px;overflow-x:auto;padding-bottom:2px;scrollbar-width:thin}
+.days button{flex:none;min-width:34px;height:30px;background:transparent;color:var(--mute);border:1px solid var(--line);border-radius:4px;font:600 12px var(--f-mono);cursor:pointer}
+.days button:hover{background:var(--accent-soft);color:var(--accent);border-color:var(--accent)}
+.status{font:400 13px var(--f-mono);color:var(--mute);min-height:1.2em}
+
+h2{margin:36px 0 4px;font:700 clamp(22px,3.4vw,30px)/1.1 var(--f-display);letter-spacing:-.015em}
+.sub{margin:0 0 16px;color:var(--mute);font-size:14px;max-width:62ch}
+
+.top{list-style:none;margin:0;padding:0;background:var(--surface);border:1px solid var(--line);border-radius:10px}
+.top li{display:grid;grid-template-columns:34px minmax(0,1fr) auto;gap:6px 12px;align-items:center;padding:12px 16px;border-top:1px solid var(--line)}
+.top li:first-child{border-top:0}
+.rk{width:30px;height:30px;border-radius:50%;display:grid;place-items:center;font:600 13px var(--f-mono);background:var(--accent-soft);color:var(--accent)}
+.top li:nth-child(-n+3) .rk{background:var(--accent);color:var(--accent-ink)}
+.nm{all:unset;cursor:pointer;font-weight:600;font-size:16px;min-width:0;overflow-wrap:anywhere}
+.nm:hover{color:var(--accent);text-decoration:underline}
+.nm:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:3px}
+.score{text-align:right;font:400 13px var(--f-mono);color:var(--mute);white-space:nowrap}
+.score b{font-size:18px;color:var(--ink)}
+.ticks{grid-column:2 / -1;display:grid;gap:2px}
+.ticks i{height:8px;border-radius:2px;background:var(--tick-off)}
+.ticks i.on{background:var(--accent)}
+.best{grid-column:2 / -1;font:400 12px var(--f-mono);color:var(--mute)}
+
+.day{background:var(--surface);border:1px solid var(--line);border-radius:10px;margin-top:10px;scroll-margin-top:150px}
+.day summary{list-style:none;cursor:pointer;display:flex;align-items:baseline;gap:12px;padding:14px 16px}
+.day summary::-webkit-details-marker{display:none}
+.day summary::after{content:"+";margin-left:auto;font:600 20px var(--f-mono);color:var(--mute)}
+.day[open] summary::after{content:"\2212"}
+.dn{font:700 20px var(--f-display)}
+.cnt{font:400 13px var(--f-mono);color:var(--mute)}
+.chips{list-style:none;margin:0;padding:4px 12px 16px;display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:6px}
+.chips a{display:flex;align-items:center;justify-content:space-between;gap:8px;min-width:0;padding:8px 10px;border:1px solid var(--line);border-radius:6px;color:var(--ink);text-decoration:none;font-size:14px}
+.chips a span:first-child{overflow-wrap:anywhere}
+.chips a .go{flex:none;color:var(--accent);font:600 12px var(--f-mono)}
+.chips a:hover{border-color:var(--accent);background:var(--accent-soft)}
+.empty{padding:28px 16px;color:var(--mute);text-align:center}
+footer{margin-top:40px;color:var(--mute);font-size:13px;border-top:1px solid var(--line);padding-top:14px}
+@media (max-width:520px){
+  .top li{grid-template-columns:30px minmax(0,1fr);}
+  .score{grid-column:2;text-align:left}
+  .facts b{font-size:19px}
+}
+@media (prefers-reduced-motion:no-preference){.day summary::after{transition:color .15s}}
+</style>
+
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="kicker"><span class="day mono" id="dayTag">Day</span><span id="hashtag"></span></div>
+    <h1 id="title">Winter Arc <em>Wall of Fame</em></h1>
+    <ul class="facts">
+      <li><b id="fLearners">0</b> learners on the wall</li>
+      <li><b id="fPosts">0</b> posts listed</li>
+      <li><b id="fPerfect">0</b> with a post every day so far</li>
+    </ul>
+  </header>
+
+  <div class="bar" id="bar">
+    <div class="search">
+      <input id="q" type="search" aria-label="Search by name" placeholder="Find your name to see all your posts" autocomplete="off">
+      <button class="btn" id="openAll" type="button">Expand all days</button>
+      <button class="btn" id="closeAll" type="button">Collapse all</button>
+    </div>
+    <nav class="days" id="jump" aria-label="Jump to day"></nav>
+    <div class="status" id="status" role="status"></div>
+  </div>
+
+  <section id="topSec">
+    <h2>Top 10 most consistent</h2>
+    <p class="sub">Ranked by number of days posted, then by longest unbroken streak. The bar shows each day from Day 1; a lit block means a post that day.</p>
+    <ol class="top" id="top"></ol>
+  </section>
+
+  <section id="daysSec">
+    <h2>Posts, day by day</h2>
+    <p class="sub">Open a day to see every learner who posted. Tap a name to read their LinkedIn post.</p>
+    <div id="days"></div>
+  </section>
+
+  <footer id="foot"></footer>
+</div>
+
+<script id="cfg" type="application/json"></script>
+<script id="data" type="application/json"></script>
+<script>
+(async function(){
+const $=s=>document.querySelector(s);
+const txt=id=>{const e=document.getElementById(id);const t=e?e.textContent.trim():'';return t.startsWith('/*')?'':t};
+async function getJSON(id,path,fb){const t=txt(id);if(t){try{return JSON.parse(t)}catch(e){}}try{const r=await fetch(path,{cache:'no-store'});if(r.ok)return await r.json()}catch(e){}return fb}
+const cfg=Object.assign({title:'Winter Arc Wall of Fame',days:90,start_date:'',hashtag:'',submit_url:''},await getJSON('cfg','data/config.json',{}));
+const data=await getJSON('data','data/submissions.json',{updated:'',entries:[]});
+
+const okUrl=u=>/^https:\/\/(www\.linkedin\.com|lnkd\.in)\//.test(u||'');
+const entries=(data.entries||[]).filter(e=>okUrl(e.url)&&e.day>0);
+const byDay=new Map(), people=new Map();
+for(const e of entries){
+  const key=e.uid||e.login; if(!key)continue;
+  if(!byDay.has(e.day))byDay.set(e.day,[]);
+  byDay.get(e.day).push({key,name:e.name||e.login,url:e.url});
+  let p=people.get(key); if(!p){p={key,name:e.name||e.login,days:new Set()};people.set(key,p)}
+  p.days.add(e.day);
+}
+const LAST=entries.reduce((m,e)=>Math.max(m,e.day),0);
+const todayIST=()=>new Date(Date.now()+5.5*3600e3).toISOString().slice(0,10);
+const CUR=cfg.start_date?Math.floor((Date.parse(todayIST())-Date.parse(cfg.start_date))/864e5)+1:LAST;
+
+for(const p of people.values()){
+  let run=0,best=0,prev=null;
+  for(const d of [...p.days].sort((a,b)=>a-b)){run=(prev===d-1)?run+1:1;best=Math.max(best,run);prev=d}
+  let cur=0,d=LAST;while(p.days.has(d)){cur++;d--}
+  p.count=p.days.size;p.best=best;p.cur=cur;
+}
+const ranked=[...people.values()].sort((a,b)=>b.count-a.count||b.best-a.best||b.cur-a.cur||a.name.localeCompare(b.name));
+
+/* header */
+document.title=cfg.title;
+$('#dayTag').textContent=`Day ${CUR||LAST} of ${cfg.days}`;
+$('#hashtag').textContent=cfg.hashtag||'';
+$('#fLearners').textContent=people.size.toLocaleString('en-IN');
+$('#fPosts').textContent=entries.length.toLocaleString('en-IN');
+$('#fPerfect').textContent=ranked.filter(p=>p.count===LAST).length;
+$('#foot').textContent=`Only LinkedIn post links submitted by learners are listed.${data.updated?' Updated '+new Date(data.updated).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'})+'.':''}`;
+
+/* top 10 */
+const top=$('#top');
+ranked.slice(0,10).forEach((p,i)=>{
+  const li=document.createElement('li');
+  const rk=document.createElement('span');rk.className='rk';rk.textContent=i+1;
+  const nm=document.createElement('button');nm.type='button';nm.className='nm';nm.textContent=p.name;nm.title='Show all posts by '+p.name;
+  nm.addEventListener('click',()=>{q.value=p.name;apply();document.getElementById('daysSec').scrollIntoView({behavior:'smooth'})});
+  const sc=document.createElement('span');sc.className='score';sc.innerHTML=`<b>${p.count}</b>/${LAST} days`;
+  const tk=document.createElement('span');tk.className='ticks';tk.setAttribute('aria-hidden','true');tk.style.gridTemplateColumns=`repeat(${LAST},1fr)`;
+  for(let d=1;d<=LAST;d++){const t=document.createElement('i');if(p.days.has(d))t.className='on';tk.appendChild(t)}
+  const bs=document.createElement('span');bs.className='best';bs.textContent=`Longest streak ${p.best} day${p.best===1?'':'s'}`;
+  li.append(rk,nm,sc,tk,bs);top.appendChild(li);
+});
+if(!ranked.length){top.innerHTML='<li class="empty" style="display:block">No posts yet.</li>'}
+
+/* day sections */
+const q=$('#q'),daysEl=$('#days'),jump=$('#jump'),secs=[];
+[...byDay.keys()].sort((a,b)=>a-b).forEach(d=>{
+  const list=byDay.get(d).sort((a,b)=>a.name.localeCompare(b.name));
+  const det=document.createElement('details');det.className='day';det.id='day-'+d;if(d===1)det.open=true;
+  const sm=document.createElement('summary');
+  const dn=document.createElement('span');dn.className='dn';dn.textContent='Day '+d;
+  const cn=document.createElement('span');cn.className='cnt';cn.textContent=list.length+(list.length===1?' post':' posts');
+  sm.append(dn,cn);det.appendChild(sm);
+  const ul=document.createElement('ul');ul.className='chips';
+  const items=list.map(x=>{
+    const li=document.createElement('li');li.dataset.n=x.name.toLowerCase();
+    const a=document.createElement('a');a.href=x.url;a.target='_blank';a.rel='noopener noreferrer nofollow';
+    const s1=document.createElement('span');s1.textContent=x.name;
+    const s2=document.createElement('span');s2.className='go';s2.textContent='Read';
+    a.append(s1,s2);li.appendChild(a);ul.appendChild(li);return li;
+  });
+  det.appendChild(ul);daysEl.appendChild(det);
+  secs.push({d,det,items,cn,total:list.length});
+  const b=document.createElement('button');b.type='button';b.textContent=d;b.setAttribute('aria-label','Jump to day '+d);
+  b.addEventListener('click',()=>{q.value='';apply();det.open=true;det.scrollIntoView({behavior:'smooth'})});
+  jump.appendChild(b);
+});
+if(!secs.length)daysEl.innerHTML='<div class="empty">The wall is waiting for its first post.</div>';
+
+/* search */
+function apply(){
+  const s=q.value.trim().toLowerCase();let hits=0,daysHit=0;
+  secs.forEach(x=>{
+    let n=0;x.items.forEach(li=>{const m=!s||li.dataset.n.includes(s);li.hidden=!m;if(m)n++});
+    x.det.hidden=!!s&&n===0;
+    if(s){if(n){x.det.open=true;daysHit++}x.cn.textContent=`${n} of ${x.total}`}
+    else{x.cn.textContent=x.total+(x.total===1?' post':' posts');if(x.d!==1)x.det.open=false;else x.det.open=true}
+    hits+=n;
+  });
+  $('#status').textContent=s?(hits?`${hits} post${hits===1?'':'s'} across ${daysHit} day${daysHit===1?'':'s'}`:'No name matches that search.'):'';
+}
+q.addEventListener('input',apply);
+$('#openAll').addEventListener('click',()=>secs.forEach(x=>{if(!x.det.hidden)x.det.open=true}));
+$('#closeAll').addEventListener('click',()=>secs.forEach(x=>x.det.open=false));
+})();
+</script>
+
+</body>
+</html>
