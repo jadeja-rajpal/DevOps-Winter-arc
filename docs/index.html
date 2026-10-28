@@ -11,10 +11,11 @@
 <style>
 [hidden]{display:none!important}
 body{margin:0}
-/* Layout: a console-style roster. Header facts, a sticky search + day jump bar, a Top 10 consistency board, then one collapsible section per challenge day listing every learner who posted. */
+/* Layout: a deep-space brand hero (portrait inside orbiting skill rings), then a console-style roster: sticky search + day jump, a star map of every learner, Top 10 consistency board, one collapsible section per challenge day, and a WhatsApp join card. */
 :root{
   --bg:#EDF1F5; --surface:#FFFFFF; --ink:#0E1C2B; --mute:#56677A; --line:#D2DBE5;
   --accent:#0B6F8E; --accent-ink:#FFFFFF; --accent-soft:#DCEEF4; --tick-off:#DCE4EC;
+  --space:#06101D; --space-2:#0D2038; --space-ink:#EAF4FF; --space-mute:#9DB4CC; --glow:#62CBEA; --wa:#25D366; --wa-ink:#04230F;
   --f-display:"Bricolage Grotesque","IBM Plex Sans",system-ui,sans-serif;
   --f-body:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
   --f-mono:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace;
@@ -32,22 +33,50 @@ body{margin:0}
 *{box-sizing:border-box}
 body{background:var(--bg);color:var(--ink);font:15px/1.5 var(--f-body)}
 body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--bg)}
-.wrap{max-width:1080px;margin:0 auto;padding-inline:max(16px,env(safe-area-inset-left,0px)) max(16px,env(safe-area-inset-right,0px));padding-block:28px 56px}
+.wrap{max-width:1080px;margin:0 auto;padding-inline:max(16px,env(safe-area-inset-left,0px)) max(16px,env(safe-area-inset-right,0px));padding-block:16px 56px}
 .mono{font-family:var(--f-mono);font-variant-numeric:tabular-nums}
+a{color:inherit}
 
-header{display:grid;gap:14px;padding-bottom:22px}
-.kicker{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:center;font:600 12px/1 var(--f-mono);letter-spacing:.08em;text-transform:uppercase;color:var(--mute)}
-.kicker .day{background:var(--accent);color:var(--accent-ink);padding:6px 10px;border-radius:4px}
-h1{margin:0;font:800 clamp(34px,7vw,64px)/1 var(--f-display);letter-spacing:-.025em;text-wrap:balance}
-h1 em{font-style:normal;color:var(--accent)}
-.facts{display:flex;flex-wrap:wrap;gap:6px 28px;margin:0;padding:14px 0 0;border-top:1px solid var(--line);list-style:none}
+/* ---------- hero ---------- */
+.hero{position:relative;overflow:hidden;background:radial-gradient(120% 90% at 85% 40%,var(--space-2) 0%,var(--space) 62%);color:var(--space-ink);border-radius:22px;padding:34px clamp(18px,4vw,36px) 40px}
+.hero-in{margin:0 auto;display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr);gap:28px;align-items:center}
+.hero .dust{position:absolute;inset:0;background-image:radial-gradient(1.2px 1.2px at 12% 22%,#fff9 50%,transparent 51%),radial-gradient(1px 1px at 33% 78%,#fff8 50%,transparent 51%),radial-gradient(1.4px 1.4px at 58% 14%,#fffb 50%,transparent 51%),radial-gradient(1px 1px at 74% 66%,#fff8 50%,transparent 51%),radial-gradient(1.2px 1.2px at 91% 30%,#fff9 50%,transparent 51%),radial-gradient(1px 1px at 22% 52%,#fff7 50%,transparent 51%),radial-gradient(1px 1px at 47% 90%,#fff7 50%,transparent 51%);pointer-events:none}
+.brandline{display:flex;flex-wrap:wrap;gap:8px 12px;align-items:center;font:600 12px/1 var(--f-mono);letter-spacing:.08em;text-transform:uppercase;color:var(--space-mute)}
+.brandline .day{background:var(--glow);color:var(--space);padding:6px 10px;border-radius:4px}
+.handle{margin:18px 0 4px;font:600 15px var(--f-mono);color:var(--glow)}
+h1{margin:0;font:800 clamp(38px,7.4vw,72px)/.98 var(--f-display);letter-spacing:-.03em;text-wrap:balance}
+h1 em{font-style:normal;color:var(--glow)}
+.lead{margin:16px 0 22px;max-width:46ch;color:var(--space-mute);font-size:17px}
+.lead b{color:var(--space-ink);font-weight:600}
+.cta-row{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.wa{display:inline-flex;align-items:center;gap:10px;background:var(--wa);color:var(--wa-ink);font:600 15px var(--f-body);text-decoration:none;padding:13px 20px;border-radius:999px;box-shadow:0 8px 30px -10px var(--wa)}
+.wa:hover{filter:brightness(1.07)}
+.wa svg{width:20px;height:20px;flex:none}
+.ghost{display:inline-flex;align-items:center;padding:12px 16px;border:1px solid #9DB4CC55;border-radius:999px;color:var(--space-ink);text-decoration:none;font-size:14px;font-weight:500}
+.ghost:hover{border-color:var(--glow);color:var(--glow)}
+.wa:focus-visible,.ghost:focus-visible{outline:2px solid var(--glow);outline-offset:3px}
+
+.orbit{position:relative;width:min(360px,78vw);aspect-ratio:1;margin:8px auto}
+.me{position:absolute;inset:19%;width:62%;height:62%;border-radius:50%;object-fit:cover;box-shadow:0 0 0 3px #62CBEA66,0 0 70px #62CBEA55}
+.ring{position:absolute;border:1px dashed #BFE1FF40;border-radius:50%;animation:spin 70s linear infinite}
+.r1{inset:7%}
+.r2{inset:-3%;animation-direction:reverse;animation-duration:110s}
+.arm{position:absolute;inset:0;transform:rotate(var(--a))}
+.arm b{position:absolute;top:0;left:50%;transform:translate(-50%,-50%) rotate(calc(-1*var(--a)));white-space:nowrap;font:600 11px/1 var(--f-mono);letter-spacing:.06em;padding:6px 9px;border-radius:999px;background:#0B2742;border:1px solid #62CBEA77;color:var(--space-ink);animation:counter 70s linear infinite}
+.r2 .arm b{animation-duration:110s;animation-direction:reverse}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes counter{from{transform:translate(-50%,-50%) rotate(calc(-1*var(--a)))}to{transform:translate(-50%,-50%) rotate(calc(-1*var(--a) - 360deg))}}
+@media (prefers-reduced-motion:reduce){.ring,.arm b{animation:none!important}}
+@media (max-width:760px){.hero-in{grid-template-columns:1fr}.orbit{order:-1;width:min(300px,74vw)}.hero{padding-top:22px}}
+
+/* ---------- facts + toolbar ---------- */
+.facts{display:flex;flex-wrap:wrap;gap:6px 28px;margin:22px 0 0;padding:0 0 18px;list-style:none}
 .facts li{display:flex;align-items:baseline;gap:8px;color:var(--mute);font-size:14px}
 .facts b{font:600 22px/1 var(--f-mono);color:var(--ink)}
-
 .bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);padding-block:10px;border-bottom:1px solid var(--line);display:grid;gap:10px}
 .search{display:flex;gap:8px;flex-wrap:wrap}
 .search input{flex:1 1 220px;min-width:0;background:var(--surface);color:var(--ink);border:1px solid var(--line);border-radius:6px;padding:10px 12px;font:inherit}
-.search input:focus-visible,button:focus-visible,a:focus-visible,summary:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.search input:focus-visible,button:focus-visible,summary:focus-visible,.chips a:focus-visible,.nm:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 .btn{background:var(--surface);color:var(--ink);border:1px solid var(--line);border-radius:6px;padding:10px 14px;font:500 14px var(--f-body);cursor:pointer}
 .btn:hover{border-color:var(--accent);color:var(--accent)}
 .days{display:flex;gap:4px;overflow-x:auto;padding-bottom:2px;scrollbar-width:thin}
@@ -55,9 +84,17 @@ h1 em{font-style:normal;color:var(--accent)}
 .days button:hover{background:var(--accent-soft);color:var(--accent);border-color:var(--accent)}
 .status{font:400 13px var(--f-mono);color:var(--mute);min-height:1.2em}
 
-h2{margin:36px 0 4px;font:700 clamp(22px,3.4vw,30px)/1.1 var(--f-display);letter-spacing:-.015em}
+h2{margin:38px 0 4px;font:700 clamp(22px,3.4vw,30px)/1.1 var(--f-display);letter-spacing:-.015em}
 .sub{margin:0 0 16px;color:var(--mute);font-size:14px;max-width:62ch}
 
+/* ---------- star map ---------- */
+.space{position:relative;border-radius:14px;overflow:hidden;background:radial-gradient(90% 120% at 50% 50%,var(--space-2),var(--space));border:1px solid #1d3550}
+#sky{display:block;width:100%;height:clamp(280px,46vw,420px);cursor:crosshair;touch-action:manipulation}
+.tip{position:absolute;pointer-events:none;background:#0B2742;color:var(--space-ink);border:1px solid #62CBEA88;border-radius:6px;padding:6px 10px;font:500 13px var(--f-body);white-space:nowrap;transform:translate(-50%,-130%)}
+.tip small{display:block;color:var(--space-mute);font:400 11px var(--f-mono)}
+.legend{position:absolute;left:12px;bottom:10px;color:var(--space-mute);font:400 11px var(--f-mono);letter-spacing:.04em}
+
+/* ---------- top 10 ---------- */
 .top{list-style:none;margin:0;padding:0;background:var(--surface);border:1px solid var(--line);border-radius:10px}
 .top li{display:grid;grid-template-columns:34px minmax(0,1fr) auto;gap:6px 12px;align-items:center;padding:12px 16px;border-top:1px solid var(--line)}
 .top li:first-child{border-top:0}
@@ -65,7 +102,6 @@ h2{margin:36px 0 4px;font:700 clamp(22px,3.4vw,30px)/1.1 var(--f-display);letter
 .top li:nth-child(-n+3) .rk{background:var(--accent);color:var(--accent-ink)}
 .nm{all:unset;cursor:pointer;font-weight:600;font-size:16px;min-width:0;overflow-wrap:anywhere}
 .nm:hover{color:var(--accent);text-decoration:underline}
-.nm:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:3px}
 .score{text-align:right;font:400 13px var(--f-mono);color:var(--mute);white-space:nowrap}
 .score b{font-size:18px;color:var(--ink)}
 .ticks{grid-column:2 / -1;display:grid;gap:2px}
@@ -73,6 +109,7 @@ h2{margin:36px 0 4px;font:700 clamp(22px,3.4vw,30px)/1.1 var(--f-display);letter
 .ticks i.on{background:var(--accent)}
 .best{grid-column:2 / -1;font:400 12px var(--f-mono);color:var(--mute)}
 
+/* ---------- days ---------- */
 .day{background:var(--surface);border:1px solid var(--line);border-radius:10px;margin-top:10px;scroll-margin-top:150px}
 .day summary{list-style:none;cursor:pointer;display:flex;align-items:baseline;gap:12px;padding:14px 16px}
 .day summary::-webkit-details-marker{display:none}
@@ -86,27 +123,61 @@ h2{margin:36px 0 4px;font:700 clamp(22px,3.4vw,30px)/1.1 var(--f-display);letter
 .chips a .go{flex:none;color:var(--accent);font:600 12px var(--f-mono)}
 .chips a:hover{border-color:var(--accent);background:var(--accent-soft)}
 .empty{padding:28px 16px;color:var(--mute);text-align:center}
-footer{margin-top:40px;color:var(--mute);font-size:13px;border-top:1px solid var(--line);padding-top:14px}
+
+/* ---------- join ---------- */
+.join{margin-top:44px;border-radius:16px;padding:28px max(20px,4vw);background:radial-gradient(110% 140% at 100% 0%,var(--space-2),var(--space));color:var(--space-ink);display:grid;grid-template-columns:minmax(0,1fr) auto;gap:18px 28px;align-items:center}
+.join h2{margin:0 0 6px;color:var(--space-ink)}
+.join p{margin:0;color:var(--space-mute);max-width:52ch}
+@media (max-width:640px){.join{grid-template-columns:1fr}}
+footer{margin-top:26px;color:var(--mute);font-size:13px;display:flex;flex-wrap:wrap;gap:6px 18px;align-items:center}
+footer a{color:var(--accent)}
 @media (max-width:520px){
-  .top li{grid-template-columns:30px minmax(0,1fr);}
+  .top li{grid-template-columns:30px minmax(0,1fr)}
   .score{grid-column:2;text-align:left}
   .facts b{font-size:19px}
 }
-@media (prefers-reduced-motion:no-preference){.day summary::after{transition:color .15s}}
 </style>
 
 </head>
 <body>
 <div class="wrap">
-  <header>
-    <div class="kicker"><span class="day mono" id="dayTag">Day</span><span id="hashtag"></span></div>
-    <h1 id="title">Winter Arc <em>Wall of Fame</em></h1>
-    <ul class="facts">
-      <li><b id="fLearners">0</b> learners on the wall</li>
-      <li><b id="fPosts">0</b> posts listed</li>
-      <li><b id="fPerfect">0</b> with a post every day so far</li>
-    </ul>
-  </header>
+  <section class="hero" aria-label="DevOps Jadeja">
+    <div class="dust" aria-hidden="true"></div>
+    <div class="hero-in">
+      <div>
+        <div class="brandline"><span class="day mono" id="dayTag">Day</span><span>DevOps Winter Arc, 90 days</span></div>
+        <p class="handle">@devops_jadeja</p>
+        <h1>DevOps Jadeja<br><em>Wall of Fame</em></h1>
+        <p class="lead"><b>Leading the DevOps universe</b> for students who want to learn it. Show up, post, and your star lights up here.</p>
+        <div class="cta-row">
+          <a class="wa" id="waTop" href="#" target="_blank" rel="noopener noreferrer">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 11.5a8.4 8.4 0 0 1-12.4 7.4L3 20.5l1.7-5.4A8.4 8.4 0 1 1 21 11.5Z"/></svg>
+            Join the WhatsApp community
+          </a>
+          <a class="ghost" id="gh" href="#" target="_blank" rel="noopener noreferrer">Course on GitHub</a>
+        </div>
+      </div>
+      <div class="orbit" aria-hidden="true">
+        <div class="ring r1">
+          <span class="arm" style="--a:0deg"><b>LINUX</b></span>
+          <span class="arm" style="--a:120deg"><b>KUBERNETES</b></span>
+          <span class="arm" style="--a:240deg"><b>TERRAFORM</b></span>
+        </div>
+        <div class="ring r2">
+          <span class="arm" style="--a:60deg"><b>AWS</b></span>
+          <span class="arm" style="--a:180deg"><b>CI/CD</b></span>
+          <span class="arm" style="--a:300deg"><b>HELM</b></span>
+        </div>
+        <img class="me" src="assets/devopsjadeja.webp" alt="DevOps Jadeja speaking on stage with a microphone">
+      </div>
+    </div>
+  </section>
+
+  <ul class="facts">
+    <li><b id="fLearners">0</b> learners on the wall</li>
+    <li><b id="fPosts">0</b> posts listed</li>
+    <li><b id="fPerfect">0</b> with a post every day so far</li>
+  </ul>
 
   <div class="bar" id="bar">
     <div class="search">
@@ -117,6 +188,16 @@ footer{margin-top:40px;color:var(--mute);font-size:13px;border-top:1px solid var
     <nav class="days" id="jump" aria-label="Jump to day"></nav>
     <div class="status" id="status" role="status"></div>
   </div>
+
+  <section>
+    <h2>The universe so far</h2>
+    <p class="sub">Every star is a learner. Bigger and brighter means more days posted. Tap a star to see their posts.</p>
+    <div class="space">
+      <canvas id="sky" role="img" aria-label="Star map of all learners on the wall"></canvas>
+      <div class="tip" id="tip" hidden></div>
+      <div class="legend" id="legend"></div>
+    </div>
+  </section>
 
   <section id="topSec">
     <h2>Top 10 most consistent</h2>
@@ -130,6 +211,17 @@ footer{margin-top:40px;color:var(--mute);font-size:13px;border-top:1px solid var
     <div id="days"></div>
   </section>
 
+  <section class="join" aria-label="Join the community">
+    <div>
+      <h2>Want to be part of it?</h2>
+      <p>Join the DevOps Jadeja community on WhatsApp to take part in the Winter Arc and get your name on this wall.</p>
+    </div>
+    <a class="wa" id="waBottom" href="#" target="_blank" rel="noopener noreferrer">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 11.5a8.4 8.4 0 0 1-12.4 7.4L3 20.5l1.7-5.4A8.4 8.4 0 1 1 21 11.5Z"/></svg>
+      Join the WhatsApp community
+    </a>
+  </section>
+
   <footer id="foot"></footer>
 </div>
 
@@ -140,7 +232,11 @@ footer{margin-top:40px;color:var(--mute);font-size:13px;border-top:1px solid var
 const $=s=>document.querySelector(s);
 const txt=id=>{const e=document.getElementById(id);const t=e?e.textContent.trim():'';return t.startsWith('/*')?'':t};
 async function getJSON(id,path,fb){const t=txt(id);if(t){try{return JSON.parse(t)}catch(e){}}try{const r=await fetch(path,{cache:'no-store'});if(r.ok)return await r.json()}catch(e){}return fb}
-const cfg=Object.assign({title:'Winter Arc Wall of Fame',days:90,start_date:'',hashtag:'',submit_url:''},await getJSON('cfg','data/config.json',{}));
+const cfg=Object.assign({title:'Winter Arc Wall of Fame',days:90,start_date:'',
+  whatsapp:'https://chat.whatsapp.com/KGJNOjzBfwiE5leg8GB60I',
+  github:'https://github.com/jadeja-rajpal/DevOps-Winter-arc',
+  instagram:'https://www.instagram.com/devops_jadeja/',
+  youtube:'https://www.youtube.com/@Devops_jadeja'},await getJSON('cfg','data/config.json',{}));
 const data=await getJSON('data','data/submissions.json',{updated:'',entries:[]});
 
 const okUrl=u=>/^https:\/\/(www\.linkedin\.com|lnkd\.in)\//.test(u||'');
@@ -156,7 +252,6 @@ for(const e of entries){
 const LAST=entries.reduce((m,e)=>Math.max(m,e.day),0);
 const todayIST=()=>new Date(Date.now()+5.5*3600e3).toISOString().slice(0,10);
 const CUR=cfg.start_date?Math.floor((Date.parse(todayIST())-Date.parse(cfg.start_date))/864e5)+1:LAST;
-
 for(const p of people.values()){
   let run=0,best=0,prev=null;
   for(const d of [...p.days].sort((a,b)=>a-b)){run=(prev===d-1)?run+1:1;best=Math.max(best,run);prev=d}
@@ -164,23 +259,28 @@ for(const p of people.values()){
   p.count=p.days.size;p.best=best;p.cur=cur;
 }
 const ranked=[...people.values()].sort((a,b)=>b.count-a.count||b.best-a.best||b.cur-a.cur||a.name.localeCompare(b.name));
+const safe=u=>/^https:\/\//.test(u||'')?u:'#';
 
-/* header */
+/* header + links */
 document.title=cfg.title;
 $('#dayTag').textContent=`Day ${CUR||LAST} of ${cfg.days}`;
-$('#hashtag').textContent=cfg.hashtag||'';
+$('#waTop').href=safe(cfg.whatsapp);$('#waBottom').href=safe(cfg.whatsapp);$('#gh').href=safe(cfg.github);
 $('#fLearners').textContent=people.size.toLocaleString('en-IN');
 $('#fPosts').textContent=entries.length.toLocaleString('en-IN');
 $('#fPerfect').textContent=ranked.filter(p=>p.count===LAST).length;
-$('#foot').textContent=`Only LinkedIn post links submitted by learners are listed.${data.updated?' Updated '+new Date(data.updated).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'})+'.':''}`;
+const foot=$('#foot');
+foot.append(document.createTextNode('Only LinkedIn post links submitted by learners are listed.'+(data.updated?' Updated '+new Date(data.updated).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'})+'.':'')));
+[['Instagram @devops_jadeja',cfg.instagram],['YouTube @Devops_jadeja',cfg.youtube],['GitHub course',cfg.github]].forEach(([t,u])=>{const a=document.createElement('a');a.href=safe(u);a.target='_blank';a.rel='noopener noreferrer';a.textContent=t;foot.appendChild(a)});
 
 /* top 10 */
+const q=$('#q');
 const top=$('#top');
+function openPerson(name){q.value=name;apply();document.getElementById('daysSec').scrollIntoView({behavior:'smooth'})}
 ranked.slice(0,10).forEach((p,i)=>{
   const li=document.createElement('li');
   const rk=document.createElement('span');rk.className='rk';rk.textContent=i+1;
   const nm=document.createElement('button');nm.type='button';nm.className='nm';nm.textContent=p.name;nm.title='Show all posts by '+p.name;
-  nm.addEventListener('click',()=>{q.value=p.name;apply();document.getElementById('daysSec').scrollIntoView({behavior:'smooth'})});
+  nm.addEventListener('click',()=>openPerson(p.name));
   const sc=document.createElement('span');sc.className='score';sc.innerHTML=`<b>${p.count}</b>/${LAST} days`;
   const tk=document.createElement('span');tk.className='ticks';tk.setAttribute('aria-hidden','true');tk.style.gridTemplateColumns=`repeat(${LAST},1fr)`;
   for(let d=1;d<=LAST;d++){const t=document.createElement('i');if(p.days.has(d))t.className='on';tk.appendChild(t)}
@@ -190,7 +290,7 @@ ranked.slice(0,10).forEach((p,i)=>{
 if(!ranked.length){top.innerHTML='<li class="empty" style="display:block">No posts yet.</li>'}
 
 /* day sections */
-const q=$('#q'),daysEl=$('#days'),jump=$('#jump'),secs=[];
+const daysEl=$('#days'),jump=$('#jump'),secs=[];
 [...byDay.keys()].sort((a,b)=>a-b).forEach(d=>{
   const list=byDay.get(d).sort((a,b)=>a.name.localeCompare(b.name));
   const det=document.createElement('details');det.className='day';det.id='day-'+d;if(d===1)det.open=true;
@@ -221,7 +321,7 @@ function apply(){
     let n=0;x.items.forEach(li=>{const m=!s||li.dataset.n.includes(s);li.hidden=!m;if(m)n++});
     x.det.hidden=!!s&&n===0;
     if(s){if(n){x.det.open=true;daysHit++}x.cn.textContent=`${n} of ${x.total}`}
-    else{x.cn.textContent=x.total+(x.total===1?' post':' posts');if(x.d!==1)x.det.open=false;else x.det.open=true}
+    else{x.cn.textContent=x.total+(x.total===1?' post':' posts');x.det.open=(x.d===1)}
     hits+=n;
   });
   $('#status').textContent=s?(hits?`${hits} post${hits===1?'':'s'} across ${daysHit} day${daysHit===1?'':'s'}`:'No name matches that search.'):'';
@@ -229,6 +329,48 @@ function apply(){
 q.addEventListener('input',apply);
 $('#openAll').addEventListener('click',()=>secs.forEach(x=>{if(!x.det.hidden)x.det.open=true}));
 $('#closeAll').addEventListener('click',()=>secs.forEach(x=>x.det.open=false));
+
+/* ---------- star map: one star per learner, most consistent at the core ---------- */
+(function(){
+  const cv=$('#sky');if(!cv||!ranked.length)return;
+  const ctx=cv.getContext('2d'),tip=$('#tip');
+  const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  $('#legend').textContent=`CORE = MOST DAYS · EDGE = FEWER · ${LAST} DAYS SO FAR`;
+  let W=0,H=0,rot=0,pos=[],hover=-1;
+  const N=ranked.length,GA=2.39996323;
+  const dust=Array.from({length:150},(_,i)=>({x:((i*7919)%1000)/1000,y:((i*104729)%1000)/1000,r:.4+((i*31)%10)/14,t:(i*13)%100}));
+  function size(){const dpr=Math.min(devicePixelRatio||1,2),r=cv.getBoundingClientRect();W=r.width;H=r.height;cv.width=Math.round(W*dpr);cv.height=Math.round(H*dpr);ctx.setTransform(dpr,0,0,dpr,0,0);draw(performance.now())}
+  function draw(now){
+    ctx.clearRect(0,0,W,H);
+    for(const d of dust){const a=.25+.35*(reduce?.5:(.5+.5*Math.sin(now/900+d.t)));ctx.fillStyle=`rgba(190,225,255,${a})`;ctx.beginPath();ctx.arc(d.x*W,d.y*H,d.r,0,6.3);ctx.fill()}
+    const cx=W/2,cy=H/2,R=Math.min(W*.47,H*.78);
+    pos=[];
+    ranked.forEach((p,i)=>{
+      const rad=Math.sqrt((i+.6)/N),ang=i*GA+rot;
+      const x=cx+Math.cos(ang)*rad*R*1.25,y=cy+Math.sin(ang)*rad*R*.62;
+      const f=p.count/Math.max(1,LAST),s=1.6+f*4.4,hot=i===hover;
+      pos.push({x,y,s,i});
+      const g=ctx.createRadialGradient(x,y,0,x,y,s*(hot?6:4.2));
+      g.addColorStop(0,`rgba(234,246,255,${.55+f*.45})`);g.addColorStop(.35,`rgba(98,203,234,${.28+f*.4})`);g.addColorStop(1,'rgba(98,203,234,0)');
+      ctx.fillStyle=g;ctx.beginPath();ctx.arc(x,y,s*(hot?6:4.2),0,6.3);ctx.fill();
+      ctx.fillStyle=`rgba(255,255,255,${.7+f*.3})`;ctx.beginPath();ctx.arc(x,y,s*.55,0,6.3);ctx.fill();
+      if(hot){ctx.strokeStyle='#62CBEA';ctx.lineWidth=1.5;ctx.beginPath();ctx.arc(x,y,s*2.2,0,6.3);ctx.stroke()}
+    });
+  }
+  function nearest(ev){const r=cv.getBoundingClientRect(),mx=ev.clientX-r.left,my=ev.clientY-r.top;let b=-1,bd=18*18;pos.forEach(p=>{const d=(p.x-mx)**2+(p.y-my)**2;if(d<bd){bd=d;b=p.i}});return {b,mx,my}}
+  function show(ev){
+    const {b,mx,my}=nearest(ev);
+    if(b!==hover){hover=b;if(reduce)draw(performance.now())}
+    if(b<0){tip.hidden=true;return}
+    const p=ranked[b];tip.hidden=false;tip.style.left=mx+'px';tip.style.top=my+'px';
+    tip.textContent=p.name;const sm=document.createElement('small');sm.textContent=`${p.count} of ${LAST} days`;tip.appendChild(sm);
+  }
+  cv.addEventListener('pointermove',show);
+  cv.addEventListener('pointerleave',()=>{hover=-1;tip.hidden=true;if(reduce)draw(performance.now())});
+  cv.addEventListener('click',ev=>{const {b}=nearest(ev);if(b>=0)openPerson(ranked[b].name)});
+  addEventListener('resize',size);size();
+  if(!reduce){let last=0;(function loop(now){if(!document.hidden&&now-last>33){rot+=.0016;last=now;draw(now)}requestAnimationFrame(loop)})(performance.now())}
+})();
 })();
 </script>
 
