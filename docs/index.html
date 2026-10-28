@@ -233,7 +233,7 @@ const $=s=>document.querySelector(s);
 const txt=id=>{const e=document.getElementById(id);const t=e?e.textContent.trim():'';return t.startsWith('/*')?'':t};
 async function getJSON(id,path,fb){const t=txt(id);if(t){try{return JSON.parse(t)}catch(e){}}try{const r=await fetch(path,{cache:'no-store'});if(r.ok)return await r.json()}catch(e){}return fb}
 const cfg=Object.assign({title:'Winter Arc Wall of Fame',days:90,start_date:'',
-  whatsapp:'https://chat.whatsapp.com/KGJNOjzBfwiE5leg8GB60I',
+  whatsapp:'https://chat.whatsapp.com/IIMYWjIuTVn433mjs0OjRv',
   github:'https://github.com/jadeja-rajpal/DevOps-Winter-arc',
   instagram:'https://www.instagram.com/devops_jadeja/',
   youtube:'https://www.youtube.com/@Devops_jadeja'},await getJSON('cfg','data/config.json',{}));
